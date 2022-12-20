@@ -25,16 +25,11 @@ pipeline{
         sh 'mvn package'
       }
     }
-    stage('Upload War File To Artifactory'){
-      agent any
-      steps{
-        sh 'echo Uploaded War file to Artifactory'
-      }
-    }
     stage('Deploy'){
       agent any
       steps{
         sh label: '', script: '''rm -rf Dockerimage
+        
 mkdir Dockerimage
 cd Dockerimage
 vi index.html
