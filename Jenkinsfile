@@ -1,24 +1,18 @@
 pipeline{
   agent none
   stages{
-    stage('Compile'){
+    stage('Init'){
       agent any
       steps{
-        sh 'mvn compile'
+        sh 'mvn init'
       }       
     }
-    stage('Code Quality'){
+    stage('Testing'){
       agent any
       steps{
-        sh 'echo Sonarqube Code Quality Check Done'
+        sh 'echo Testing Done'
       }
     }
-    stage('Test'){
-      agent any
-      steps{
-        sh 'mvn test'
-      }
-    } 
     stage('Package'){
       agent any
       steps{
@@ -29,7 +23,6 @@ pipeline{
       agent any
       steps{
         sh label: '', script: '''rm -rf Dockerimage
-        
 mkdir Dockerimage
 cd Dockerimage
 vi index.html
