@@ -1,24 +1,17 @@
 pipeline{
   agent none
   stages{
-    stage('Init'){
-      agent any
-      steps{
-        sh 'mvn init'
-      }       
-    }
-    stage('Testing'){
-      agent any
-      steps{
-        sh 'echo Testing Done'
+    stage('Build Image'){
+        when {
+          branch 'main'
+        }
+      agent {
+        node {
+           customWorkspace '/home/ubuntu/jenkins/multi-branch/'
+        }
       }
     }
-    stage('Package'){
-      agent any
-      steps{
-        sh 'mvn package'
-      }
-    }
+
     stage('Deploy'){
       agent any
       steps{
