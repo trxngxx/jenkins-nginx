@@ -8,11 +8,11 @@ pipeline {
          }
         agent {
           node {
-            customWorkspace '/home/ngo1/Dockerimage/'
+            customWorkspace '/root/Dockerimage/'
              }
          }
       steps {
-        sh "cd /home/ngo1/Dockerimage && docker build -t nginxweb:latest ."
+        sh "cd /root/Dockerimage && docker build -t nginxweb:latest ."
       }
     }
 
@@ -22,7 +22,7 @@ pipeline {
             }
       agent {
         node {
-          customWorkspace '/home/ngo1/Dockerimage/'
+          customWorkspace '/root/Dockerimage/'
             }
          }
       steps {
