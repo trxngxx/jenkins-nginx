@@ -8,6 +8,7 @@ pipeline {
          }
         agent {
           node {
+            label 'dev-aws'
             customWorkspace '/root/Dockerimage/'
              }
          }
@@ -22,6 +23,7 @@ pipeline {
             }
       agent {
         node {
+          label 'dev-aws'
           customWorkspace '/root/Dockerimage/'
             }
          }
