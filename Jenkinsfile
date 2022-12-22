@@ -8,7 +8,7 @@ pipeline {
          }
         agent {
           node {
-            label 'ubuntu'
+            
             customWorkspace '/root/Dockerimage/'
              }
          }
@@ -23,7 +23,7 @@ pipeline {
             }
       agent {
         node {
-          label 'ubuntu'
+          
           customWorkspace '/root/Dockerimage/'
             }
          }
