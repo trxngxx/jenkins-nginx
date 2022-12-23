@@ -7,10 +7,10 @@ pipeline {
           branch 'main'
          }
         agent {
-          
-            
+          node{
+            label 'ubuntu'
             customWorkspace '/root/Dockerimage/'
-            
+          }
          }
       steps {
         sh "cd /root/Dockerimage && docker build -t nginxweb:latest ."
@@ -22,10 +22,10 @@ pipeline {
              branch 'main'
             }
       agent {
-       
-          
+        node {
+          label 'ubuntu'
           customWorkspace '/root/Dockerimage/'
-            
+        }
          }
       steps {
         sh """
