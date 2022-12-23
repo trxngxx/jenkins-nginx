@@ -7,7 +7,7 @@ pipeline {
           branch 'main'
          }
         agent {
-          node{
+          pipeline{
             label 'ubuntu'
             customWorkspace '/root/Dockerimage/'
           }
@@ -22,7 +22,7 @@ pipeline {
              branch 'main'
             }
       agent {
-        node {
+        pipeline {
           label 'ubuntu'
           customWorkspace '/root/Dockerimage/'
         }
