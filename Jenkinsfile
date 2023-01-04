@@ -29,7 +29,7 @@ pipeline {
          }
       steps {
         sh """
-        echo "Deploy code"
+        echo "Deploy code" && docker run -d --name nginxweb -p 8081:80 -v nginx_web:/usr/share/nginx/html nginxweb
         """
         }
       }
