@@ -9,7 +9,7 @@ pipeline {
         agent {
           node {
             label 'test'
-            customWorkspace '/root/Dockerimage/'
+            customWorkspace '/var/jenkins_home/workspace/nginx'
           }
          }
       steps {
@@ -24,7 +24,7 @@ pipeline {
       agent {
         node {
           label 'test'
-          customWorkspace '/root/Dockerimage/'
+          customWorkspace '/var/jenkins_home/workspace/nginx'
         }
          }
       steps {
