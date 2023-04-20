@@ -1,6 +1,6 @@
 pipeline {
   
-  agent none
+  agent any
   stages{
     stage('Build Image'){
         when {
@@ -8,7 +8,7 @@ pipeline {
          }
         agent {
           node {
-            label 'ubuntu'
+            label 'test'
             customWorkspace '/root/Dockerimage/'
           }
          }
@@ -23,7 +23,7 @@ pipeline {
             }
       agent {
         node {
-          label 'ubuntu'
+          label 'test'
           customWorkspace '/root/Dockerimage/'
         }
          }
