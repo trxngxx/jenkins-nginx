@@ -13,12 +13,13 @@ pipeline {
           }
          }
       steps {
-        sh "cd /root/Dockerimage && docker build -t nginxweb:latest ."
+        sh 'sudo apt-get update && sudo apt-get install -y nginx'
       }
     }
 
-    stage('Deploy'){
-       when {
+    
+            stage('Deploy') {
+              when {
              branch 'main'
             }
       agent {
@@ -27,11 +28,11 @@ pipeline {
           customWorkspace '/var/jenkins_home/workspace/nginx'
         }
          }
-      steps {
-        sh """
-        echo "Deploy code" && docker run -d --name nginxweb -p 8081:80 -v nginx_web:/usr/share/nginx/html nginxweb
-        """
+            steps {
+                sh 'sudo cp /var/lib/jenkins/workspace/my-job/index.html /var/www/html/'
+                sh 'sudo cp /var/lib/jenkins/workspace/my-job/nginx.conf /etc/nginx/nginx.conf'
+                sh 'sudo systemctl restart nginx'
+            }
         }
-      }
     }
  }
