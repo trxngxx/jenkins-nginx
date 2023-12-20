@@ -1,31 +1,53 @@
 pipeline {
-  
-  agent any
-  stages{
-            when {
-          branch 'main'
-         }
-        agent {
-          node {
-            label 'test'
-            customWorkspace '/var/jenkins_home/workspace/nginx'
-          }
-         }
-    stage('Build Image'){
-      steps {
-        sh 'sudo apt-get update && sudo apt-get install -y nginx'
-      }
+   agent none
+   environment {
+        ENV = "dev"
+        NODE = "Build-server"
     }
 
-    
-      stage('Deploy') {
-          
-       steps {
-                sh 'sudo cp /var/lib/jenkins/workspace/my-job/index.html /var/www/html/'
-                sh 'sudo cp /var/lib/jenkins/workspace/my-job/nginx.conf /etc/nginx/nginx.conf'
-                sh 'sudo systemctl restart nginx'
+   stages {
+    stage('Build Image') {
+        agent {
+            node {
+                label "Build-server"
+                customWorkspace "/home/ubuntu/jenkins/multi-branch/devops-training-$ENV/"
+                }
+            }
+        environment {
+            TAG = sh(returnStdout: true, script: "git rev-parse -short=10 HEAD | tail -n +2").trim()
+        }
+         steps {
+            sh "docker build nodejs/. -t devops-training-nodejs-$ENV:latest --build-arg BUILD_ENV=$ENV -f nodejs/Dockerfile"
+
+
+            sh "cat docker.txt | docker login -u manhhoangseta --password-stdin"
+            // tag docker image
+            sh "docker tag devops-training-nodejs-$ENV:latest [dockerhub-repo]:$TAG"
+
+            //push docker image to docker hub
+            sh "docker push [dockerhub-repo]:$TAG"
+
+	    // remove docker image to reduce space on build server	
+            sh "docker rmi -f [dockerhub-repo]:$TAG"
+
+           }
+         
+       }
+	  stage ("Deploy ") {
+	    agent {
+        node {
+            label "Target-Server"
+                customWorkspace "/home/ubuntu/jenkins/multi-branch/devops-training-$ENV/"
             }
         }
-    }
- }
-
+        environment {
+            TAG = sh(returnStdout: true, script: "git rev-parse -short=10 HEAD | tail -n +2").trim()
+        }
+	steps {
+            sh "sed -i 's/{tag}/$TAG/g' /home/ubuntu/jenkins/multi-branch/devops-training-$ENV/docker-compose.yaml"
+            sh "docker compose up -d"
+        }      
+       }
+   }
+    
+}
